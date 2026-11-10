@@ -21,21 +21,30 @@ interface Placed {
 
 const box = ref<HTMLElement | null>(null);
 const placed = ref<Placed[]>([]);
-const width = ref(0);
-const height = ref(0);
 let observer: ResizeObserver | null = null;
 let canvas: HTMLCanvasElement | null = null;
+/** what the current layout was made for: the results arrive every second, mostly unchanged */
+let laidOut = "";
+const widths = new Map<string, number>();
 
 const sorted = computed(() => [...props.words].sort((a, b) => b.count - a.count));
 
+/** size of a word; the width is measured once at 100 px and scaled */
 function measure(text: string, size: number, font: string): { w: number; h: number } {
-  canvas ??= document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    return { w: text.length * size * 0.6, h: size };
+  const key = `${font}|${text}`;
+  let w100 = widths.get(key);
+  if (w100 === undefined) {
+    canvas ??= document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.font = `600 100px ${font}`;
+      w100 = ctx.measureText(text).width;
+    } else {
+      w100 = text.length * 60;
+    }
+    widths.set(key, w100);
   }
-  ctx.font = `600 ${size}px ${font}`;
-  return { w: ctx.measureText(text).width, h: size * 1.05 };
+  return { w: (w100 * size) / 100, h: size * 1.05 };
 }
 
 function layout(): void {
@@ -45,9 +54,12 @@ function layout(): void {
   }
   const W = el.clientWidth;
   const H = el.clientHeight;
-  width.value = W;
-  height.value = H;
   const words = sorted.value;
+  const signature = `${W}x${H}|${words.map((w) => `${w.text}:${w.count}`).join("|")}`;
+  if (signature === laidOut) {
+    return;
+  }
+  laidOut = signature;
   if (W === 0 || H === 0 || words.length === 0) {
     placed.value = [];
     return;

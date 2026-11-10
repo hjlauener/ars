@@ -124,6 +124,18 @@ uda shell
   nicht, unter *Administration → Plugins → UdonArs → Sprachen
   aktualisieren*.
 
+## Simuliertes Publikum
+
+Zum Ausprobieren oder Üben einer Präsentation ohne echte Teilnehmende
+(Code siehe Reiter «Präsentieren»):
+
+```bash
+./dev/simulate.py 123456 --live
+```
+
+Ohne `--live` beantworten 20 Personen einmal die aktuelle Frage; `-n 50`
+ändert die Anzahl.
+
 ## Frontend bauen (nur wer am Code arbeitet)
 
 Die Oberfläche ist in `frontend/` (Vue 3 + TypeScript). Das fertige Ergebnis

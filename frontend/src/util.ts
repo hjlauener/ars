@@ -66,7 +66,8 @@ export class Poller {
 
   constructor(
     private readonly fn: () => Promise<void>,
-    private readonly interval: number,
+    /** ms between two calls, or a function that decides it each time */
+    private readonly interval: number | (() => number),
     private readonly onError: (failing: boolean) => void = () => {},
   ) {}
 
@@ -110,7 +111,8 @@ export class Poller {
       return;
     }
     const hidden = document.visibilityState === "hidden";
-    const delay = Math.min(15000, this.interval * (hidden ? 5 : 1) * (1 + this.failures));
+    const base = typeof this.interval === "function" ? this.interval() : this.interval;
+    const delay = Math.min(15000, base * (hidden ? 5 : 1) * (1 + this.failures));
     window.clearTimeout(this.timer);
     this.timer = window.setTimeout(() => void this.tick(), delay);
   }

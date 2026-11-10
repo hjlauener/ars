@@ -25,15 +25,16 @@ class ilUdaJoinEndpoint
 
     private ilUdaService $service;
     private ilLanguage $lng;
-    private ilObjUser $user;
-    private ilAccessHandler $access;
+    /** null without ILIAS session (REST context, see join.php): anonymous */
+    private ?ilObjUser $user = null;
 
     public function __construct(private readonly string $plugin_dir)
     {
         global $DIC;
         $this->service = ilUdaService::create();
-        $this->user = $DIC->user();
-        $this->access = $DIC->access();
+        if (ilContext::hasUser() && $DIC->offsetExists('ilUser')) {
+            $this->user = $DIC->user();
+        }
         $this->lng = new ilLanguage($this->chooseLanguage());
         $this->lng->loadLanguageModule('rep_robj_xuda');
     }
@@ -53,7 +54,7 @@ class ilUdaJoinEndpoint
 
     private function isAnonymous(): bool
     {
-        $id = $this->user->getId();
+        $id = $this->user?->getId() ?? 0;
         return $id === 0 || $id === ANONYMOUS_USER_ID;
     }
 
@@ -65,8 +66,9 @@ class ilUdaJoinEndpoint
         if (in_array($wanted, $supported, true)) {
             return $wanted;
         }
-        if (!$this->isAnonymous() && in_array($this->user->getLanguage(), $supported, true)) {
-            return $this->user->getLanguage();
+        $user_lang = $this->isAnonymous() ? '' : (string) $this->user?->getLanguage();
+        if (in_array($user_lang, $supported, true)) {
+            return $user_lang;
         }
         $header = strtolower((string) ($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? ''));
         foreach (explode(',', $header) as $part) {
@@ -99,8 +101,10 @@ class ilUdaJoinEndpoint
         $dist = 'js/dist/';
         $version = is_file($this->plugin_dir . '/js/dist/join.js') ? (string) filemtime($this->plugin_dir . '/js/dist/join.js') : '0';
 
+        $signal = $obj_id > 0 ? ilUdaSignal::relativeUrl($obj_id) : null;
         $config = [
             'apiUrl' => 'join.php?a=api',
+            'signalUrl' => $signal === null ? '' : $this->iliasUrl() . '/' . $signal,
             'code' => $code,
             'lang' => $this->lng->getLangKey(),
             'palette' => $palette,
@@ -217,8 +221,9 @@ class ilUdaJoinEndpoint
                 'loginUrl' => $this->iliasUrl() . '/goto.php?target=xuda_' . $ref_id,
             ];
         }
+        global $DIC;
         foreach ($refs as $ref_id) {
-            if ($this->access->checkAccess('read', '', (int) $ref_id)) {
+            if ($DIC->access()->checkAccess('read', '', (int) $ref_id)) {
                 return null;
             }
         }
@@ -228,7 +233,7 @@ class ilUdaJoinEndpoint
     private function participantToken(mixed $device_token): ?string
     {
         if (!$this->isAnonymous()) {
-            return ilUdaService::hashToken('user:' . $this->user->getId());
+            return ilUdaService::hashToken('user:' . (int) $this->user?->getId());
         }
         if (!is_string($device_token) || !preg_match('/^[A-Za-z0-9_-]{16,64}$/', $device_token)) {
             return null;
@@ -243,7 +248,7 @@ class ilUdaJoinEndpoint
     private function state(int $obj_id, string $mode, string $token): array
     {
         $repo = $this->service->repo();
-        $title = ilObject::_lookupTitle($obj_id);
+        $title = $repo->lookupTitle($obj_id);
         $session = $this->service->runningSession($obj_id, $mode);
         if ($session === null) {
             // shortly after the end: thank the participants instead of "starting soon"
@@ -298,7 +303,8 @@ class ilUdaJoinEndpoint
             ];
         }
 
-        if ($session['show_results'] === 1) {
+        // results only after the own answer (or when the voting is over): they would influence it
+        if ($session['show_results'] === 1 && ($response !== null || $session['voting'] !== 1)) {
             $results = $this->service->results($session['id'], $question);
             if (isset($results['leaderboard'])) {
                 $results['leaderboard'] = array_map(static fn(array $e): array => [

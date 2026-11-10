@@ -70,5 +70,12 @@ uda
 
 ## Aktueller Stand
 
-Version 0.3.0: alle vier Fragetypen, Präsentieren, Teilnahme mit und ohne
-Anmeldung, Ergebnisse mit CSV-Export, Plugin-Konfiguration.
+Version 0.3.1: alle vier Fragetypen, Präsentieren, Teilnahme mit und ohne
+Anmeldung, Ergebnisse mit CSV-Export, Plugin-Konfiguration. Getestet mit 500
+simulierten Smartphones (siehe TECHNIK.md).
+
+Zum Ausprobieren ohne echtes Publikum:
+
+```bash
+./dev/simulate.py 123456 --live
+```

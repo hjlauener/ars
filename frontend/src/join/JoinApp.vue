@@ -88,7 +88,48 @@ async function request(body: Record<string, unknown>): Promise<void> {
   apply(await postJson<ParticipantState>(props.config.apiUrl, { code: code.value, token, ...body }));
 }
 
-const poller = new Poller(() => request({ action: "state" }), 1500, (failing) => (offline.value = failing));
+/**
+ * Every 1.5 s: read the signal file (static, cheap for the server); ask
+ * join.php only if it changed, and in any case every 10 s (every 5 s while
+ * results are shown, so that they stay up to date). Without signal file:
+ * ask join.php every time.
+ */
+const SIGNAL_FULL_EVERY = 10000;
+const RESULTS_FULL_EVERY = 5000;
+let lastSignal = "";
+let lastFull = 0;
+/** false once the signal file turned out not to work on this server */
+let signalUsable = !!props.config.signalUrl;
+const SIGNAL_FORMAT = /^\{"s":\d+,"r":\d+\}$/;
+
+async function tick(): Promise<void> {
+  const now = Date.now();
+  const s = state.value;
+  const resultsVisible = s?.status === "running" && !!s.showResults && (answered.value || !voting.value);
+  const fullEvery = resultsVisible ? RESULTS_FULL_EVERY : SIGNAL_FULL_EVERY;
+  if (signalUsable && s && now - lastFull < fullEvery) {
+    try {
+      const response = await fetch(`${props.config.signalUrl}?_=${now}`, { cache: "no-store", credentials: "omit" });
+      const signal = response.ok ? (await response.text()).trim() : "";
+      if (SIGNAL_FORMAT.test(signal)) {
+        const changed = signal !== lastSignal;
+        lastSignal = signal;
+        if (!changed) {
+          return;
+        }
+      } else if (response.status !== 404) {
+        // something else than the signal (other web server rules): do without
+        signalUsable = false;
+      }
+    } catch {
+      // network: ask join.php
+    }
+  }
+  await request({ action: "state" });
+  lastFull = Date.now();
+}
+
+const poller = new Poller(tick, 1500, (failing) => (offline.value = failing));
 
 async function send(answer: string[]): Promise<void> {
   if (!question.value || sending.value) {

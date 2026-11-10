@@ -75,6 +75,8 @@ export interface AppConfig {
 /** configuration of the participation page (join.php) */
 export interface JoinConfig {
   apiUrl: string;
+  /** static signal file of the presentation ("" if there is none) */
+  signalUrl: string;
   code: string;
   lang: string;
   palette: string[];

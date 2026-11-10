@@ -36,6 +36,7 @@ class ilUdonArsPlugin extends ilRepositoryObjectPlugin
     protected function uninstallCustom(): void
     {
         ilUdaRepository::create()->dropTables();
+        ilUdaSignal::deleteAll();
         ilUdaConfig::deleteAll();
     }
 

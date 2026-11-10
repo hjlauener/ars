@@ -31,6 +31,8 @@ class ilUdaService
     /** small tolerance for answers that arrive just after the time limit */
     private const GRACE_MS = 1500;
     private const CLOUD_TOP = 60;
+    /** a session still "running" after this time was forgotten: it ends by itself */
+    private const MAX_SESSION_SECONDS = 12 * 3600;
     private const LEADERBOARD_TOP = 10;
 
     public const RESULTS_AUTO = 'auto';
@@ -173,18 +175,35 @@ class ilUdaService
     // ------------------------------------------------------------------
 
     /**
-     * The running session of the object, after closing a quiz question whose
-     * time is over.
+     * The running session of the object, after
+     * - ending it if it was forgotten (older than MAX_SESSION_SECONDS),
+     * - going to the first question if the current one was deleted,
+     * - closing a quiz question whose time is over.
      * @return array<string, int>|null
      */
     public function runningSession(int $obj_id, string $result_mode): ?array
     {
         $session = $this->repo->getRunningSession($obj_id);
-        if ($session === null || $session['voting'] !== 1) {
-            return $session;
+        if ($session === null) {
+            return null;
+        }
+        if ($session['started'] < time() - self::MAX_SESSION_SECONDS) {
+            $this->endSession($session['id']);
+            return null;
         }
         $question = $this->repo->getQuestion($obj_id, $session['quest_id']);
-        $limit = $question !== null && $question['type'] === 'quiz' ? (int) $question['settings']['timeLimit'] : 0;
+        if ($question === null) {
+            $first = $this->repo->getQuestions($obj_id)[0] ?? null;
+            if ($first !== null) {
+                $this->gotoQuestion($obj_id, $session['id'], $first['id'], $result_mode);
+                $session = $this->repo->getSession($obj_id, $session['id']) ?? $session;
+            }
+            return $session;
+        }
+        if ($session['voting'] !== 1) {
+            return $session;
+        }
+        $limit = $question['type'] === 'quiz' ? (int) $question['settings']['timeLimit'] : 0;
         if ($limit > 0 && self::nowMs() > $session['q_started'] + $limit * 1000 + self::GRACE_MS) {
             $this->repo->updateSession($session['id'], [
                 'voting' => 0,
@@ -215,11 +234,24 @@ class ilUdaService
         return $this->repo->getSession($obj_id, $id);
     }
 
-    /** shows a question: voting opens, results as set for the presentation (quiz: after the voting) */
+    /**
+     * Shows a question: voting opens, results as set for the presentation
+     * (quiz: after the voting). Back to a quiz question that was already
+     * answered: it stays closed and shows its solution; "Abstimmung öffnen"
+     * starts it again.
+     */
     public function gotoQuestion(int $obj_id, int $session_id, int $quest_id, string $result_mode): void
     {
         $question = $this->repo->getQuestion($obj_id, $quest_id);
         if ($question === null) {
+            return;
+        }
+        if ($question['type'] === 'quiz' && $this->repo->countResponses($session_id, $quest_id) > 0) {
+            $this->repo->updateSession($session_id, [
+                'quest_id' => $quest_id,
+                'voting' => 0,
+                'show_results' => $result_mode === self::RESULTS_AUTO ? 1 : 0,
+            ]);
             return;
         }
         $this->repo->updateSession($session_id, [

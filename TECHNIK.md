@@ -39,7 +39,13 @@ Bearbeiten der Frage (Umstellen, Text ändern) gültig bleiben.
 - **Antworten**: eine Antwort je Person und Frage, änderbar solange offen
   (Quiz: nicht änderbar).
 - **Beenden**: `ended` gesetzt; die Teilnahme-Seite zeigt 4 Stunden lang
-  „Vielen Dank“, danach wieder „Gleich geht es los“.
+  „Vielen Dank“, danach wieder „Gleich geht es los“. Eine vergessene
+  Durchführung (älter als 12 Stunden) endet beim nächsten Abruf von selbst.
+- **Zurück zu einer beantworteten Quizfrage**: bleibt geschlossen und zeigt
+  die Auflösung (bei `auto`); „Abstimmung öffnen“ startet sie neu.
+- **Aktuelle Frage gelöscht**: die Durchführung springt zur ersten Frage.
+- **Ergebnisse auf dem Smartphone**: erst nach der eigenen Antwort oder nach
+  dem Ende der Abstimmung (der Server schickt sie vorher gar nicht).
 
 ## Aufbau
 
@@ -54,6 +60,7 @@ classes/
   class.ilUdaRepository.php    Datenbank
   class.ilUdaService.php       Logik: Fragen prüfen, Sessions, Antworten, Punkte, Auswertung
   class.ilUdaJoinEndpoint.php  Seite und JSON-Schnittstelle der Teilnehmenden
+  class.ilUdaSignal.php        statische Signaldatei je Präsentation (siehe Echtzeit)
   class.ilUdaTexts.php         Sprachtexte "ui_*" für das Frontend
 frontend/                      Vue 3 + TypeScript, gebaut mit Vite nach js/dist/
   src/ars.ts                   Ansichten in ILIAS (Editor, Präsentieren, Ergebnisse, Teilnehmen-Info)
@@ -80,11 +87,17 @@ das nicht per Formular schicken).
 ### Öffentliche Teilnahme (`join.php`)
 
 `join.php` liegt im Plugin-Ordner (unter `public/Customizing/…`, also direkt
-vom Webserver erreichbar), sucht `ilias.ini.php` nach oben, startet ILIAS im
-Kontext `ilContext::CONTEXT_WAC` (wie `public/gs_content.php`): keine
-Weiterleitung zur Anmeldung, aber Benutzer und Datenbank sind da.
-Angemeldete werden an ihrer ILIAS-Sitzung erkannt (Cookie mit Pfad `/`),
-alle anderen sind der anonyme Benutzer.
+vom Webserver erreichbar) und sucht `ilias.ini.php` nach oben. Es startet ILIAS
+ohne Weiterleitung zur Anmeldung:
+
+- **mit Sitzungs-Cookie** (z.B. in ILIAS angemeldet): Kontext
+  `ilContext::CONTEXT_WAC` (wie `public/gs_content.php`); die Person wird an
+  ihrer ILIAS-Sitzung erkannt.
+- **ohne Cookie** (anonyme Smartphones): Kontext `ilContext::CONTEXT_REST` –
+  keine ILIAS-Sitzung, kein Cookie. Sonst legte jede Abfrage eines Geräts ohne
+  Cookie eine Sitzung in `usr_session` an (im Test: 7 900 in 10 Minuten).
+  In diesem Kontext gibt es keinen Benutzer; `ilObject::_lookupTitle` geht
+  darum nicht (Titel direkt aus `object_data`).
 
 - Teilnahme ohne Anmeldung erlaubt (Standard): Code genügt.
 - Ausgeschaltet: anonym → Status `login` mit Link `goto.php?target=xuda_<ref>`;
@@ -97,21 +110,46 @@ mehreren Geräten). In der Datenbank steht nur
 (ilSetting `xuda/salt`). Keine Benutzer-IDs in den Antworten. Der Name für die
 Quiz-Rangliste ist freiwillig.
 
-### Echtzeit: Polling
+### Echtzeit: Polling mit Signaldatei
 
-Kein Mercure/SSE/WebSocket: ILIAS Slim läuft mit Apache/PHP; offene
+Kein Mercure/SSE/WebSocket: ILIAS Slim läuft mit Apache/PHP (prefork); offene
 Verbindungen würden je einen PHP-Prozess belegen, und ein eigener
 Echtzeitdienst wäre zusätzlicher Betrieb. Stattdessen fragen die Geräte ab:
 
-- Präsentierende: jede Sekunde (`present`)
-- Teilnehmende: alle 1,5 Sekunden (`state`)
+- **Präsentierende**: jede Sekunde `present` (vor dem Start alle 3 s).
+- **Teilnehmende**: alle 1,5 s die **Signaldatei**
+  `data/<client>/xuda_signal_<obj_id>.json` (`ilUdaSignal`). Apache liefert
+  sie statisch, ohne PHP. Sie enthält nur `{"s":<Session>,"r":<Revision>}` und
+  wird bei jeder Änderung der Durchführung neu geschrieben
+  (`ilUdaRepository::createSession/updateSession`). `join.php` fragen die
+  Geräte nur, wenn sich das Signal ändert, und sonst alle 10 s (alle 5 s,
+  solange sie Ergebnisse sehen).
+- Die Datei liegt direkt im Client-Ordner: Pfade `data/x/y/z` leitet die
+  `.htaccess` von ILIAS an den Web-Access-Checker (`wac.php`), der ILIAS
+  startet und Besucher ohne Sitzung abweist (er liefert dann ein PNG).
+- Fehlt die Datei (404), fragen die Geräte `join.php` direkt. Liefert der
+  Server etwas anderes als das erwartete Format, verzichtet die Seite ganz
+  auf das Signal – andere Server-Einrichtungen funktionieren also weiter,
+  nur ohne Ersparnis.
 - im Hintergrund (Tab nicht sichtbar) fünfmal langsamer, nach Fehlern mit
-  wachsender Pause (`Poller` in `frontend/src/util.ts`)
+  wachsender Pause (`Poller` in `frontend/src/util.ts`).
 
-Eine Abfrage von `join.php` dauert lokal etwa 30 ms (ILIAS-Start inklusive).
 An die Geräte gehen nur zusammengefasste Ergebnisse, nie einzelne Antworten.
-Für sehr grosse Gruppen (über ~300 Personen gleichzeitig) wäre der nächste
-Schritt ein kurzer Zwischenspeicher der Ergebnisse je Frage und Sekunde.
+
+**Messung** (lokal, ILIAS Slim in Docker, 500 simulierte Smartphones, 30 s,
+durchschnittliche Rechenzeit):
+
+| | Webserver | Datenbank |
+|---|---|---|
+| jede Abfrage an `join.php` (alle 1,5 s) | 3,7 Kerne | 1,3 Kerne |
+| mit Signaldatei | 0,8 Kerne | 0,3 Kerne |
+
+Eine Abfrage von `join.php` kostet etwa 11 ms Rechenzeit (fast nur der
+ILIAS-Start), eine Signal-Abfrage praktisch nichts. Ein Fragewechsel ist nach
+spätestens etwa 1,5 s auf den Geräten. Nach einem Fragewechsel holen alle
+Geräte innerhalb von 1,5 s den neuen Zustand (kurze Spitze).
+
+Zum Nachmessen und Üben: `dev/simulate.py` (simuliertes Publikum).
 
 ## Datenbank
 

@@ -75,6 +75,14 @@ class ilUdaRepository
         return $code;
     }
 
+    /** title of the object (without ilObject, which needs a user) */
+    public function lookupTitle(int $obj_id): string
+    {
+        $res = $this->db->queryF('SELECT title FROM object_data WHERE obj_id = %s', ['integer'], [$obj_id]);
+        $row = $this->db->fetchAssoc($res);
+        return $row ? (string) $row['title'] : '';
+    }
+
     public function lookupObjIdByCode(string $code): int
     {
         $res = $this->db->queryF(
@@ -102,6 +110,7 @@ class ilUdaRepository
         }
         $this->db->manipulateF('DELETE FROM ' . self::T_QUEST . ' WHERE obj_id = %s', ['integer'], [$obj_id]);
         $this->db->manipulateF('DELETE FROM ' . self::T_DATA . ' WHERE obj_id = %s', ['integer'], [$obj_id]);
+        ilUdaSignal::delete($obj_id);
     }
 
     // ------------------------------------------------------------------
@@ -304,6 +313,7 @@ class ilUdaRepository
             'q_started' => ['integer', $now_ms],
             'rev' => ['integer', 1],
         ]);
+        ilUdaSignal::write($obj_id, $id, 1);
         return $id;
     }
 
@@ -333,6 +343,12 @@ class ilUdaRepository
             $types,
             $data
         );
+
+        $res = $this->db->queryF('SELECT obj_id, rev FROM ' . self::T_SESS . ' WHERE id = %s', ['integer'], [$id]);
+        $row = $this->db->fetchAssoc($res);
+        if ($row) {
+            ilUdaSignal::write((int) $row['obj_id'], $id, (int) $row['rev']);
+        }
     }
 
     public function deleteSession(int $id): void
@@ -545,6 +561,17 @@ class ilUdaRepository
             $totals[(string) $row['token']] = (int) $row['total'];
         }
         return $totals;
+    }
+
+    public function countResponses(int $session_id, int $quest_id): int
+    {
+        $res = $this->db->queryF(
+            'SELECT COUNT(*) n FROM ' . self::T_RESP . ' WHERE session_id = %s AND quest_id = %s',
+            ['integer', 'integer'],
+            [$session_id, $quest_id]
+        );
+        $row = $this->db->fetchAssoc($res);
+        return (int) ($row['n'] ?? 0);
     }
 
     public function deleteResponsesOfQuestion(int $session_id, int $quest_id): void

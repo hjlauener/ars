@@ -29,7 +29,9 @@ const pickerDialog = ref<HTMLDialogElement | null>(null);
 
 let sortable: Sortable | null = null;
 let saveTimer: number | undefined;
-let pending: Question | null = null;
+/** changed questions not yet saved (by id); saved one after the other, retried after network errors */
+const pending = new Map<number, Question>();
+let saving: Promise<void> = Promise.resolve();
 
 const selected = computed(() => questions.value.find((q) => q.id === selectedId.value) ?? null);
 const selectedIndex = computed(() => questions.value.findIndex((q) => q.id === selectedId.value));
@@ -131,21 +133,41 @@ function onChange(question: Question): void {
   if (i >= 0) {
     questions.value[i] = question;
   }
-  pending = question;
+  pending.set(question.id, question);
   status.value = "saving";
-  window.clearTimeout(saveTimer);
-  saveTimer = window.setTimeout(() => void flush(), 700);
+  scheduleSave(700);
 }
 
-async function flush(): Promise<void> {
+function scheduleSave(ms: number): void {
   window.clearTimeout(saveTimer);
-  const question = pending;
-  pending = null;
-  if (!question) {
-    return;
-  }
-  const result = await call<{ question: Question }>({ action: "save", question });
-  status.value = result ? "saved" : "error";
+  saveTimer = window.setTimeout(() => void flush(), ms);
+}
+
+/** saves all open changes; resolves when they are stored (or failed) */
+function flush(): Promise<void> {
+  window.clearTimeout(saveTimer);
+  saving = saving.then(async () => {
+    for (const [id, question] of [...pending]) {
+      pending.delete(id);
+      try {
+        const result = await postJson<{ error?: string }>(api, { action: "save", question });
+        // an error of the server (e.g. question deleted meanwhile) is not repeated
+        errorText.value = result.error ?? "";
+      } catch {
+        if (!pending.has(id)) {
+          pending.set(id, question);
+        }
+        status.value = "error";
+        errorText.value = t("err_connection");
+        scheduleSave(3000);
+        return;
+      }
+    }
+    if (pending.size === 0) {
+      status.value = "saved";
+    }
+  });
+  return saving;
 }
 
 async function duplicate(): Promise<void> {
@@ -166,9 +188,7 @@ async function confirmDelete(): Promise<void> {
   if (!question) {
     return;
   }
-  if (pending?.id === question.id) {
-    pending = null;
-  }
+  pending.delete(question.id);
   const index = questions.value.findIndex((q) => q.id === question.id);
   const result = await call<{ questions: Question[] }>({ action: "delete", id: question.id });
   if (result) {
@@ -187,16 +207,16 @@ function moveSelected(delta: number): void {
 
 /** save what is still open when leaving the page */
 function onPageHide(): void {
-  if (pending) {
+  for (const question of pending.values()) {
     void fetch(api, {
       method: "POST",
       keepalive: true,
       credentials: "same-origin",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "save", question: pending }),
+      body: JSON.stringify({ action: "save", question }),
     });
-    pending = null;
   }
+  pending.clear();
 }
 
 onMounted(() => {

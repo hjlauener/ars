@@ -68,7 +68,8 @@ async function send(body: Record<string, unknown>): Promise<void> {
 
 const poller = new Poller(
   async () => apply(await postJson<PresenterState>(api, { action: "present" })),
-  1000,
+  // every second while presenting; before the start less often
+  () => (session.value ? 1000 : 3000),
   (failing) => (offline.value = failing),
 );
 
@@ -191,7 +192,8 @@ const showResults = computed(() => !!session.value?.showResults && !!state.value
         </span>
       </header>
 
-      <main v-if="question" class="uda-stage__main" aria-live="polite">
+      <main v-if="question" class="uda-stage__main">
+        <p class="uda-sr-only" aria-live="polite">{{ t("present_position", index + 1, questions.length) }}: {{ question.title }}</p>
         <div class="uda-stage__meta">
           <span class="uda-chip"><TypeIcon :type="question.type" :size="18" /> {{ t(`type_${question.type}`) }}</span>
           <span>{{ t("present_position", index + 1, questions.length) }}</span>

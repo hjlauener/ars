@@ -9,7 +9,7 @@ GitHub: `hjlauener/ars` (privat).
 
 ## Stand
 
-Version 0.3.0: vier Fragetypen (Auswahlfrage, Wortwolke, Rangfolge, Quiz),
+Version 0.3.1: vier Fragetypen (Auswahlfrage, Wortwolke, Rangfolge, Quiz),
 Reiter „Fragen“, „Präsentieren“, „Ergebnisse“ (bzw. „Teilnehmen“ mit
 Leserecht), „Info“, „Einstellungen“, „Rechte“; Teilnahme-Seite `join.php`;
 Plugin-Konfiguration. Technik siehe `TECHNIK.md`.
@@ -46,6 +46,9 @@ Plugin-Konfiguration. Technik siehe `TECHNIK.md`.
 - Alle CSS-Klassen mit Präfix `uda-`, alles unter `.uda`.
 - Teilnehmende: nur zusammengefasste Ergebnisse an die Geräte, keine
   Benutzer-IDs in Antworten, Tokens nur gehasht speichern.
+- Jede Änderung einer Durchführung über `ilUdaRepository::updateSession`
+  (schreibt die Signaldatei); sonst merken die Smartphones sie erst nach
+  bis zu 10 s.
 
 ## Sprachdateien
 
@@ -91,6 +94,8 @@ diff <(cut -d'#' -f1 lang/ilias_de.lang) <(cut -d'#' -f1 lang/ilias_fr.lang)
   `./dev/reload.sh`.
 - PHP gibt es auf dem Mac nicht; prüfen im ILIAS-Slim-Image:
   `docker run --rm -v "$PWD:/plugin" -w /plugin --entrypoint sh ilias-slim-web:latest -c 'for f in join.php plugin.php sql/dbupdate.php classes/*.php; do php -l "$f"; done'`
+- Simuliertes Publikum (auch zum Üben): `./dev/simulate.py 123456 -n 30`
+  (einmal antworten) oder `--live` (bleibt dabei, beantwortet jede neue Frage).
 - Teilnahme lässt sich ohne Browser testen:
   `curl -X POST -H 'Content-Type: application/json' -d '{"action":"state","code":"123456","token":"abcdefghijklmnop"}' 'http://localhost:8080/Customizing/global/plugins/Services/Repository/RepositoryObject/UdonArs/join.php?a=api'`
 - Vor jedem Push: `php -l` auf alle PHP-Dateien, den Sprachdatei-Check oben

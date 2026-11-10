@@ -155,7 +155,6 @@ class ilObjUdonArsGUI extends ilObjectPluginGUI
     {
         $dist = $this->getPlugin()->getRelativeDirectory() . '/js/dist/';
         $version = $this->getAssetVersion();
-        $this->tpl->addCss($dist . 'ars.css?v=' . $version);
 
         $palette = $this->ars()->getPalette();
         $config = [
@@ -182,7 +181,13 @@ class ilObjUdonArsGUI extends ilObjectPluginGUI
             ];
         }
 
-        $html = '<div class="uda-app" data-config="'
+        // stylesheet as <link> in the content, not via addCss(): ILIAS replaces the
+        // version parameter there with its own (?_v=11_0), so browsers would keep
+        // an old stylesheet after an update
+        $html = '<link rel="stylesheet" href="'
+            . htmlspecialchars($dist . 'ars.css?v=' . $version, ENT_QUOTES)
+            . '">'
+            . '<div class="uda-app" data-config="'
             . htmlspecialchars((string) json_encode($config, JSON_UNESCAPED_UNICODE), ENT_QUOTES)
             . '"></div>'
             . '<script type="module" src="'

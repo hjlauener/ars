@@ -1,0 +1,28 @@
+# Udon ARS – fichier de langue français (vouvoiement).
+# Les lignes commençant par # sont des commentaires. Clés et ordre comme dans ilias_de.lang.
+
+# --- Objet et droits ---
+obj_xuda#:#Udon ARS
+objs_xuda#:#Udon ARS
+xuda_new#:#Nouveau Udon ARS
+xuda_add#:#Ajouter un Udon ARS
+obj_xuda_duplicate#:#Copier l’Udon ARS
+# Textes pour les tableaux de droits d’ILIAS (droits, modèles de rôles, journal des droits)
+create_xuda#:#Créer un Udon ARS
+crs_create_xuda#:#Créer un Udon ARS dans le cours
+grp_create_xuda#:#Créer un Udon ARS dans le groupe
+cat_create_xuda#:#Créer un Udon ARS dans la catégorie
+fold_create_xuda#:#Créer un Udon ARS dans le dossier
+xuda_visible#:#L’Udon ARS est visible
+xuda_read#:#Ouvrir l’Udon ARS
+xuda_write#:#Modifier les paramètres
+xuda_delete#:#Supprimer ou déplacer l’Udon ARS
+xuda_edit_permission#:#Modifier les paramètres des droits
+
+# --- Onglets et textes généraux ---
+content#:#Contenu
+properties#:#Paramètres
+edit#:#Modifier
+
+# --- Contenu ---
+content_empty#:#Udon ARS est encore vide. Le contenu suivra.

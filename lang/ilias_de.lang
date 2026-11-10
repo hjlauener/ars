@@ -1,0 +1,28 @@
+# Udon ARS – Sprachdatei Deutsch (Schweizer Schreibweise mit ss).
+# Zeilen mit # am Anfang sind Kommentare. Schlüssel und Reihenfolge wie in ilias_en.lang.
+
+# --- Objekt und Rechte ---
+obj_xuda#:#Udon ARS
+objs_xuda#:#Udon ARS
+xuda_new#:#Neues Udon ARS
+xuda_add#:#Udon ARS hinzufügen
+obj_xuda_duplicate#:#Udon ARS kopieren
+# Texte für die Rechte-Tabellen von ILIAS (Rechte, Rollenvorlagen, Rechte-Protokoll)
+create_xuda#:#Udon ARS anlegen
+crs_create_xuda#:#Udon ARS im Kurs anlegen
+grp_create_xuda#:#Udon ARS in der Gruppe anlegen
+cat_create_xuda#:#Udon ARS in der Kategorie anlegen
+fold_create_xuda#:#Udon ARS im Ordner anlegen
+xuda_visible#:#Udon ARS ist sichtbar
+xuda_read#:#Udon ARS öffnen
+xuda_write#:#Einstellungen bearbeiten
+xuda_delete#:#Udon ARS löschen oder verschieben
+xuda_edit_permission#:#Rechteeinstellungen ändern
+
+# --- Reiter und allgemeine Texte ---
+content#:#Inhalt
+properties#:#Einstellungen
+edit#:#Bearbeiten
+
+# --- Inhalt ---
+content_empty#:#Udon ARS ist noch leer. Der Inhalt folgt.

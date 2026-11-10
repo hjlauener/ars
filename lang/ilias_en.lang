@@ -1,0 +1,28 @@
+# Udon ARS – English language file (British spelling).
+# Lines starting with # are comments. Keys and order as in ilias_de.lang.
+
+# --- Object and permissions ---
+obj_xuda#:#Udon ARS
+objs_xuda#:#Udon ARS
+xuda_new#:#New Udon ARS
+xuda_add#:#Add Udon ARS
+obj_xuda_duplicate#:#Copy Udon ARS
+# Texts for the ILIAS permission tables (permissions, role templates, permission log)
+create_xuda#:#Create Udon ARS
+crs_create_xuda#:#Create Udon ARS in course
+grp_create_xuda#:#Create Udon ARS in group
+cat_create_xuda#:#Create Udon ARS in category
+fold_create_xuda#:#Create Udon ARS in folder
+xuda_visible#:#Udon ARS is visible
+xuda_read#:#Open Udon ARS
+xuda_write#:#Edit settings
+xuda_delete#:#Delete or move Udon ARS
+xuda_edit_permission#:#Change permission settings
+
+# --- Tabs and general texts ---
+content#:#Content
+properties#:#Settings
+edit#:#Edit
+
+# --- Content ---
+content_empty#:#Udon ARS is still empty. The content will follow.

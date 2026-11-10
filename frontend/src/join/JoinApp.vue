@@ -261,6 +261,14 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
+      <div v-else-if="state.status === 'ended'" class="uda-card uda-wait">
+        <span class="uda-done-mark" aria-hidden="true">✓</span>
+        <div>
+          <h1 class="uda-join__h1">{{ t("join_ended_title") }}</h1>
+          <p>{{ t("join_ended_text") }}</p>
+        </div>
+      </div>
+
       <!-- name for the quiz ranking -->
       <form v-else-if="askName" class="uda-card" @submit.prevent="saveName(false)">
         <h1 class="uda-join__h1">{{ t("join_name_title") }}</h1>

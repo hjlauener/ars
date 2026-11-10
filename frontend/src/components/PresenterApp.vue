@@ -25,6 +25,8 @@ const confirmEnd = ref(false);
 const confirmReset = ref(false);
 const stage = ref<HTMLElement | null>(null);
 const isFullscreen = ref(false);
+/** the stage fills the browser window; real full screen in addition where the browser allows it */
+const fillWindow = ref(false);
 const remaining = ref<number | null>(null);
 let deadline = 0;
 let countdown: number | undefined;
@@ -78,19 +80,34 @@ function go(delta: number): void {
 }
 
 function toggleFullscreen(): void {
-  if (document.fullscreenElement) {
-    void document.exitFullscreen();
-  } else {
-    void stage.value?.requestFullscreen?.();
+  if (fillWindow.value || document.fullscreenElement) {
+    fillWindow.value = false;
+    if (document.fullscreenElement) {
+      void document.exitFullscreen().catch(() => {});
+    }
+    return;
+  }
+  fillWindow.value = true;
+  if (document.fullscreenEnabled && stage.value?.requestFullscreen) {
+    stage.value.requestFullscreen().catch(() => {});
   }
 }
 
 function onFullscreen(): void {
+  const was = isFullscreen.value;
   isFullscreen.value = document.fullscreenElement === stage.value;
+  if (was && !isFullscreen.value) {
+    // left real full screen (Escape): also leave the window-filling view
+    fillWindow.value = false;
+  }
 }
 
 function onKey(event: KeyboardEvent): void {
   const target = event.target as HTMLElement | null;
+  if (event.key === "Escape" && fillWindow.value && !bigQr.value) {
+    fillWindow.value = false;
+    return;
+  }
   if (!session.value || target?.closest("input, textarea, select, dialog") || event.altKey || event.ctrlKey || event.metaKey) {
     return;
   }
@@ -156,7 +173,7 @@ const showResults = computed(() => !!session.value?.showResults && !!state.value
     </section>
 
     <!-- running -->
-    <section v-if="session" ref="stage" class="uda-stage" :class="{ 'is-fullscreen': isFullscreen }">
+    <section v-if="session" ref="stage" class="uda-stage" :class="{ 'is-fullscreen': isFullscreen || fillWindow, 'is-fill': fillWindow }">
       <header class="uda-stage__bar">
         <button type="button" class="uda-stage__qr" :title="t('present_qr_big')" @click="bigQr = true">
           <QrCode :value="config.joinUrl" :label="t('qr_label')" />
@@ -231,7 +248,7 @@ const showResults = computed(() => !!session.value?.showResults && !!state.value
         </div>
         <div class="uda-controls__more">
           <button type="button" class="uda-btn uda-btn--ghost" :disabled="busy" @click="confirmReset = true">{{ t("present_reset") }}</button>
-          <button type="button" class="uda-btn uda-btn--ghost" @click="toggleFullscreen">{{ isFullscreen ? t("present_exit_fullscreen") : t("present_fullscreen") }}</button>
+          <button type="button" class="uda-btn uda-btn--ghost" @click="toggleFullscreen">{{ isFullscreen || fillWindow ? t("present_exit_fullscreen") : t("present_fullscreen") }}</button>
           <button type="button" class="uda-btn uda-btn--ghost uda-btn--danger-text" :disabled="busy" @click="confirmEnd = true">{{ t("present_end") }}</button>
         </div>
       </footer>

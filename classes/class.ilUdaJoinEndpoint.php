@@ -20,6 +20,8 @@ class ilUdaJoinEndpoint
     private const PREFIX = 'rep_robj_xuda_';
     private const MAX_BODY = 16384;
     private const MAX_NAME = 30;
+    /** how long after the end the page shows "ended" (then again "waiting") */
+    private const ENDED_NOTICE_SECONDS = 4 * 3600;
 
     private ilUdaService $service;
     private ilLanguage $lng;
@@ -142,6 +144,10 @@ class ilUdaJoinEndpoint
         if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
             $this->sendJson(['error' => 'POST only'], 405);
         }
+        // only JSON requests of the page itself (a form of another site cannot send this type)
+        if (!str_starts_with(strtolower((string) ($_SERVER['CONTENT_TYPE'] ?? '')), 'application/json')) {
+            $this->sendJson(['error' => 'invalid request'], 415);
+        }
         $raw = (string) file_get_contents('php://input', false, null, 0, self::MAX_BODY + 1);
         if (strlen($raw) > self::MAX_BODY) {
             $this->sendJson(['error' => $this->txt('ui_err_invalid_answer')], 413);
@@ -240,7 +246,10 @@ class ilUdaJoinEndpoint
         $title = ilObject::_lookupTitle($obj_id);
         $session = $this->service->runningSession($obj_id, $mode);
         if ($session === null) {
-            return ['status' => 'waiting', 'title' => $title];
+            // shortly after the end: thank the participants instead of "starting soon"
+            $latest = $repo->getLatestSession($obj_id);
+            $ended = $latest !== null && $latest['ended'] > time() - self::ENDED_NOTICE_SECONDS;
+            return ['status' => $ended ? 'ended' : 'waiting', 'title' => $title];
         }
         $repo->touchParticipant($session['id'], $token, time());
 

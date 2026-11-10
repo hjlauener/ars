@@ -233,6 +233,8 @@ ui_join_denied_title#:#Kein Zugang
 ui_join_denied_text#:#Sie haben keine Berechtigung, an dieser Umfrage teilzunehmen.
 ui_join_waiting_title#:#Gleich geht es los
 ui_join_waiting_text#:#Die Präsentation hat noch nicht begonnen. Diese Seite aktualisiert sich von selbst.
+ui_join_ended_title#:#Vielen Dank!
+ui_join_ended_text#:#Die Präsentation ist beendet. Falls sie noch einmal startet, erscheinen die Fragen hier von selbst.
 ui_join_name_title#:#Ihr Name für die Rangliste
 ui_join_name_text#:#Diese Präsentation enthält ein Quiz. Mit einem Namen erscheinen Sie in der Rangliste. Das ist freiwillig.
 ui_join_name_label#:#Name oder Spitzname

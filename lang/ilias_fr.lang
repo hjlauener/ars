@@ -233,6 +233,8 @@ ui_join_denied_title#:#Pas d’accès
 ui_join_denied_text#:#Vous n’êtes pas autorisé·e à participer.
 ui_join_waiting_title#:#Ça commence bientôt
 ui_join_waiting_text#:#La présentation n’a pas encore commencé. Cette page s’actualise d’elle-même.
+ui_join_ended_title#:#Merci beaucoup !
+ui_join_ended_text#:#La présentation est terminée. Si elle redémarre, les questions s’afficheront ici d’elles-mêmes.
 ui_join_name_title#:#Votre nom pour le classement
 ui_join_name_text#:#Cette présentation contient un quiz. Avec un nom, vous apparaissez dans le classement. C’est facultatif.
 ui_join_name_label#:#Nom ou pseudonyme

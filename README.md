@@ -1,7 +1,8 @@
 # Udon ARS – ILIAS 11 Repository-Plugin
 
-Repository-Objekt-Plugin für **ILIAS 11**, mit dem sich im Magazin ein Objekt
-vom Typ **„Udon ARS“** hinzufügen lässt.
+Ein schlankes **Audience-Response-System** für ILIAS 11 / ILIAS Slim: Eine
+Präsentation mit Fragen, die Teilnehmenden antworten auf dem Smartphone über
+einen Code oder QR-Code, die Ergebnisse erscheinen live auf dem Beamer.
 
 | | |
 |---|---|
@@ -11,6 +12,29 @@ vom Typ **„Udon ARS“** hinzufügen lässt.
 | Slot | `Services/Repository/RepositoryObject` (`robj`) |
 | ILIAS | 11.0 – 11.999 |
 | PHP | ≥ 8.3 |
+
+## Funktionen
+
+- **Vier Fragetypen**: Auswahlfrage (eine oder mehrere Antworten), Wortwolke,
+  Rangfolge (Ziehen oder Pfeile), Quiz (richtige Antwort, Zeitlimit, Punkte,
+  Rangliste)
+- **Fragen** (Reiter): Fragetyp wählen, Fragen bearbeiten, umstellen,
+  duplizieren; speichert automatisch
+- **Präsentieren**: Code und QR-Code, Live-Ergebnisse, Abstimmung öffnen /
+  schliessen, Ergebnisse zeigen / verbergen, Antworten zurücksetzen,
+  Vollbild, Pfeiltasten
+- **Teilnehmen**: Seite fürs Smartphone, mit oder ohne Anmeldung; der Code
+  bleibt gleich und lässt sich ausdrucken
+- **Ergebnisse**: jede Durchführung einzeln, CSV-Export, Löschen
+- **Einstellungen** je Udon ARS: Farbpalette, Ergebnisse sofort oder nach
+  Freigabe, neuer Code
+- **Plugin-Konfiguration**: Teilnahme ohne Anmeldung, verfügbare Fragetypen,
+  Standard-Farbpalette, Ergebnisse automatisch löschen, kurze Adresse
+
+Rechte: *Lesen* = teilnehmen, *Bearbeiten* = Fragen, Präsentieren,
+Ergebnisse, Einstellungen.
+
+Technische Details: **[TECHNIK.md](TECHNIK.md)**.
 
 ## Lokal entwickeln und testen
 
@@ -46,6 +70,5 @@ uda
 
 ## Aktueller Stand
 
-Gerüst (Version 0.1.0): Ein Udon ARS lässt sich anlegen; es hat die Reiter
-„Inhalt“ (noch Platzhalter), „Info“, „Einstellungen“ (Titel, Beschreibung)
-und „Rechte“.
+Version 0.3.0: alle vier Fragetypen, Präsentieren, Teilnahme mit und ohne
+Anmeldung, Ergebnisse mit CSV-Export, Plugin-Konfiguration.

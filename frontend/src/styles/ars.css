@@ -1263,6 +1263,13 @@
   font-size: 1.15rem;
 }
 
+.uda-stage.is-fill {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  overflow: auto;
+}
+
 .uda-stage__bar {
   display: flex;
   align-items: center;
@@ -1757,6 +1764,18 @@
   border-radius: 50%;
   background: var(--uda-p2);
   animation: uda-pulse 1.6s ease-in-out infinite;
+}
+
+.uda-done-mark {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--uda-p3);
+  color: #fff;
+  font-weight: 700;
+  line-height: 34px;
+  text-align: center;
 }
 
 @keyframes uda-pulse {

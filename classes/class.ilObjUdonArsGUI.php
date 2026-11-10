@@ -224,7 +224,12 @@ class ilObjUdonArsGUI extends ilObjectPluginGUI
     protected function api(): void
     {
         global $DIC;
-        $raw = (string) $DIC->http()->request()->getBody();
+        $request = $DIC->http()->request();
+        // only JSON requests of the page itself (a form of another site cannot send this type)
+        if (!str_starts_with(strtolower($request->getHeaderLine('Content-Type')), 'application/json')) {
+            $this->sendJson(['error' => 'invalid request']);
+        }
+        $raw = (string) $request->getBody();
         if (strlen($raw) > self::MAX_REQUEST_BYTES) {
             $this->sendJson(['error' => 'request too large']);
         }

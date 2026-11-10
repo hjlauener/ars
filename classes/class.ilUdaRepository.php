@@ -226,6 +226,19 @@ class ilUdaRepository
         return $row ? $this->sessionFromRow($row) : null;
     }
 
+    /** @return array<string, int>|null the newest session of the object (running or ended) */
+    public function getLatestSession(int $obj_id): ?array
+    {
+        $this->db->setLimit(1, 0);
+        $res = $this->db->queryF(
+            'SELECT * FROM ' . self::T_SESS . ' WHERE obj_id = %s ORDER BY id DESC',
+            ['integer'],
+            [$obj_id]
+        );
+        $row = $this->db->fetchAssoc($res);
+        return $row ? $this->sessionFromRow($row) : null;
+    }
+
     /** @return array<string, int>|null */
     public function getSession(int $obj_id, int $id): ?array
     {

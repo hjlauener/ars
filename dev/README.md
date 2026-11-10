@@ -123,3 +123,18 @@ uda shell
 - **Sprachtexte erscheinen als `-rep_robj_xuda_...-`:** neu laden. Hilft das
   nicht, unter *Administration → Plugins → UdonArs → Sprachen
   aktualisieren*.
+
+## Frontend bauen (nur wer am Code arbeitet)
+
+Die Oberfläche ist in `frontend/` (Vue 3 + TypeScript). Das fertige Ergebnis
+liegt in `js/dist/` und ist im Repository – für `uda` braucht es also kein
+Node. Wer etwas in `frontend/` ändert, baut neu (Node läuft im Docker-Image
+von ILIAS Slim):
+
+```bash
+./dev/npm.sh install
+```
+
+```bash
+./dev/npm.sh run build
+```

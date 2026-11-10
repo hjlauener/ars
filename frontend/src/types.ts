@@ -110,7 +110,7 @@ export interface SessionInfo {
 }
 
 export interface ParticipantState {
-  status: "waiting" | "running" | "login" | "denied" | "unknown";
+  status: "waiting" | "ended" | "running" | "login" | "denied" | "unknown";
   title?: string;
   rev?: number;
   hasQuiz?: boolean;

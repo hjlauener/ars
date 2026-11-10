@@ -233,6 +233,8 @@ ui_join_denied_title#:#No access
 ui_join_denied_text#:#You are not allowed to take part in this poll.
 ui_join_waiting_title#:#Starting soon
 ui_join_waiting_text#:#The presentation has not started yet. This page updates by itself.
+ui_join_ended_title#:#Thank you!
+ui_join_ended_text#:#The presentation has ended. If it starts again, the questions will appear here by themselves.
 ui_join_name_title#:#Your name for the leaderboard
 ui_join_name_text#:#This presentation contains a quiz. With a name you appear on the leaderboard. This is optional.
 ui_join_name_label#:#Name or nickname

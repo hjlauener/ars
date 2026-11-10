@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 /**
- * Repository object plugin "Udon ARS" (type xuda) for ILIAS 11.
+ * Repository object plugin "Udon ARS" (type xuda) for ILIAS 11: a simple
+ * audience response system with four question types (choice, word cloud,
+ * ranking, quiz).
  */
 class ilUdonArsPlugin extends ilRepositoryObjectPlugin
 {
@@ -33,11 +35,12 @@ class ilUdonArsPlugin extends ilRepositoryObjectPlugin
 
     protected function uninstallCustom(): void
     {
-        // Tables created in sql/dbupdate.php are removed here once they exist.
+        ilUdaRepository::create()->dropTables();
+        ilUdaConfig::deleteAll();
     }
 
     public function allowCopy(): bool
     {
-        return false;
+        return true;
     }
 }

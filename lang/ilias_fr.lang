@@ -1,5 +1,6 @@
 # Udon ARS – fichier de langue français (vouvoiement).
 # Les lignes commençant par # sont des commentaires. Clés et ordre comme dans ilias_de.lang.
+# Les clés ui_ vont à l’interface (TypeScript), sans ui_. Paramètre~: %s. Pluriel~: _one / _other.
 
 # --- Objet et droits ---
 obj_xuda#:#Udon ARS
@@ -14,15 +15,247 @@ grp_create_xuda#:#Créer un Udon ARS dans le groupe
 cat_create_xuda#:#Créer un Udon ARS dans la catégorie
 fold_create_xuda#:#Créer un Udon ARS dans le dossier
 xuda_visible#:#L’Udon ARS est visible
-xuda_read#:#Ouvrir l’Udon ARS
-xuda_write#:#Modifier les paramètres
+xuda_read#:#Ouvrir l’Udon ARS et participer
+xuda_write#:#Modifier les questions, présenter, résultats et paramètres
 xuda_delete#:#Supprimer ou déplacer l’Udon ARS
 xuda_edit_permission#:#Modifier les paramètres des droits
 
 # --- Onglets et textes généraux ---
-content#:#Contenu
+tab_questions#:#Questions
+tab_present#:#Présenter
+tab_results#:#Résultats
+tab_join#:#Participer
 properties#:#Paramètres
 edit#:#Modifier
 
-# --- Contenu ---
-content_empty#:#Udon ARS est encore vide. Le contenu suivra.
+# --- Info ---
+info_participation#:#Participation
+info_code#:#Code de participation
+info_address#:#Adresse de participation
+
+# --- Paramètres de l’objet ---
+prop_palette#:#Palette de couleurs
+prop_result_mode#:#Afficher les résultats
+prop_result_auto#:#Immédiatement
+prop_result_auto_info#:#Les résultats s’affichent en direct dès qu’une question est montrée. Pour un quiz, seulement à la fin du temps.
+prop_result_release#:#Après libération
+prop_result_release_info#:#Les résultats restent masqués jusqu’à ce que vous cliquiez sur « Afficher les résultats » pendant la présentation.
+prop_code_info#:#Les participants rejoignent avec ce code et le code QR. Il ne change pas, vous pouvez donc l’imprimer.
+prop_renew_code#:#Générer un nouveau code
+prop_renew_code_info#:#L’ancien code et l’ancien code QR ne fonctionneront plus.
+
+# --- Palettes de couleurs ---
+palette_natural#:#Calme & Naturel
+palette_natural_info#:#Vert doux : apaisant, harmonieux, digne de confiance.
+palette_clear#:#Moderne & Clair
+palette_clear_info#:#Bleus nets : professionnel, lisible, sobre.
+palette_warm#:#Chaleureux & Accueillant
+palette_warm_info#:#Pêche et orange : invitant, motivant, accessible.
+palette_fresh#:#Ludique & Frais
+palette_fresh_info#:#Violets : créatif, vivant, mais utilisé avec retenue.
+
+# --- Configuration du plugin ---
+config_title#:#Udon ARS – paramètres
+config_anonymous#:#Autoriser la participation sans connexion
+config_anonymous_info#:#Les participants n’ont besoin que du code ou du code QR. Désactivé : seules les personnes connectées ayant le droit de lecture sur l’objet peuvent participer.
+config_types#:#Types de questions disponibles
+config_types_info#:#Les types désactivés ne peuvent plus être ajoutés. Les questions existantes sont conservées et continuent de fonctionner.
+config_palette#:#Palette de couleurs par défaut
+config_palette_info#:#Pour les nouveaux Udon ARS. Une autre palette peut être choisie dans les paramètres de chaque objet.
+config_retention#:#Supprimer automatiquement les résultats après
+config_retention_info#:#Ne concerne que les sessions terminées. 0 = ne jamais supprimer automatiquement.
+config_days#:#jours
+config_short_url#:#Adresse courte de participation (facultatif)
+config_short_url_info#:#Affichée pendant la présentation à la place de l’adresse longue, p. ex. https://ilias.example.org/ars. La redirection vers join.php dans le dossier du plugin se configure sur le serveur web ; le code est ajouté comme paramètre c.
+config_short_url_invalid#:#Veuillez saisir une adresse commençant par http:// ou https://.
+config_saved#:#Paramètres enregistrés.
+
+# --- Exportation (CSV) ---
+csv_question_nr#:#Question n°
+csv_type#:#Type de question
+csv_question#:#Question
+csv_participant#:#Participant
+csv_name#:#Nom (quiz)
+csv_answer#:#Réponse
+csv_points#:#Points
+csv_seconds#:#Secondes jusqu’à la réponse
+csv_time#:#Moment
+
+# --- Interface : types de questions ---
+ui_type_choice#:#Choix multiple
+ui_type_choice_desc#:#Les participants choisissent parmi des réponses données. Pour des sondages rapides, des questions de compréhension et d’opinion.
+ui_tags_choice#:#rapide|en direct|facile à évaluer
+ui_type_cloud#:#Nuage de mots
+ui_type_cloud_desc#:#Les participants saisissent des mots libres ou de courtes phrases. Les mots fréquents apparaissent plus grands.
+ui_tags_cloud#:#réponses ouvertes|qualitatif|recueillir des termes
+ui_type_rank#:#Classement
+ui_type_rank_desc#:#Les participants classent des éléments. Pour des priorités, des préférences et des décisions.
+ui_tags_rank#:#glisser-déposer|priorités|comparatif
+ui_type_quiz#:#Quiz
+ui_type_quiz_desc#:#Questions de connaissances avec une bonne réponse, une limite de temps et des points.
+ui_tags_quiz#:#points|limite de temps|stimulant
+ui_preview_words#:#Curiosité|Équipe|Échange|Calme|Idées|Focus
+ui_picker_title#:#Choisir un type de question
+ui_picker_subtitle#:#Choisissez la forme de participation adaptée à votre présentation.
+ui_picker_use#:#Utiliser ce type
+ui_picker_none#:#Tous les types de questions sont désactivés dans la configuration du plugin.
+
+# --- Interface : général ---
+ui_cancel#:#Annuler
+ui_close#:#Fermer
+ui_code#:#Code
+ui_qr_label#:#Code QR de participation
+ui_move_up#:#Monter
+ui_move_down#:#Descendre
+ui_err_connection#:#Pas de connexion au serveur. Nouvelle tentative…
+ui_err_type_disabled#:#Ce type de question est désactivé.
+ui_err_no_questions#:#Ajoutez d’abord au moins une question.
+ui_err_no_session#:#La présentation n’est pas en cours.
+ui_err_voting_closed#:#Le vote sur cette question est clos.
+ui_err_already_answered#:#Vous avez déjà répondu à cette question de quiz.
+ui_err_invalid_answer#:#Cette réponse n’a pas pu être enregistrée.
+ui_seconds_one#:#%s seconde
+ui_seconds_other#:#%s secondes
+ui_minutes_one#:#%s minute
+ui_minutes_other#:#%s minutes
+ui_points_n#:#%s points
+ui_anonymous#:#Anonyme
+ui_you#:#vous
+
+# --- Interface : modifier les questions ---
+ui_editor_n_questions_one#:#%s question
+ui_editor_n_questions_other#:#%s questions
+ui_editor_add_question#:#Ajouter une question
+ui_editor_go_present#:#Présenter
+ui_editor_list_label#:#Questions de la présentation
+ui_editor_drag#:#Glisser pour changer l’ordre
+ui_editor_untitled#:#Sans titre
+ui_editor_question_nr#:#Question %s
+ui_editor_duplicate#:#Dupliquer
+ui_editor_delete#:#Supprimer
+ui_editor_delete_title#:#Supprimer la question ?
+ui_editor_delete_text#:#« %s » sera supprimée. Les réponses à cette question lors de sessions précédentes n’apparaîtront plus dans les résultats.
+ui_editor_question#:#Question
+ui_editor_question_placeholder#:#Votre question…
+ui_editor_answers#:#Réponses
+ui_editor_items#:#Éléments
+ui_editor_help_choice#:#Les réponses vides sont ignorées lors de la présentation. Appuyez sur Entrée pour ajouter une réponse.
+ui_editor_help_cloud#:#Les participants écrivent leurs propres mots.
+ui_editor_help_rank#:#Les participants voient les éléments dans cet ordre et les réorganisent.
+ui_editor_help_quiz#:#Marquez exactement une bonne réponse.
+ui_editor_answer_n#:#Réponse %s
+ui_editor_answer_placeholder#:#Réponse %s
+ui_editor_correct#:#correcte
+ui_editor_mark_correct#:#Marquer comme bonne réponse
+ui_editor_remove_answer#:#Retirer la réponse
+ui_editor_add_answer#:#Ajouter une réponse
+ui_editor_add_item#:#Ajouter un élément
+ui_editor_settings#:#Options
+ui_editor_multiple#:#Autoriser plusieurs réponses
+ui_editor_max_words#:#Mots par personne
+ui_editor_time_limit#:#Limite de temps
+ui_editor_no_limit#:#Sans limite de temps
+ui_editor_quiz_points#:#Bonne réponse : 100 points ; avec limite de temps, jusqu’à 100 points de plus pour les réponses rapides.
+ui_editor_rank_info#:#Les participants classent tous les éléments. La place moyenne est évaluée.
+ui_editor_warn_title#:#La question n’a pas encore de texte.
+ui_editor_warn_answers#:#Remplissez au moins deux réponses.
+ui_editor_warn_correct#:#Marquez la bonne réponse.
+ui_editor_saving#:#Enregistrement…
+ui_editor_saved#:#Enregistré
+ui_editor_save_error#:#Non enregistré
+
+# --- Interface : présenter ---
+ui_present_start#:#Démarrer la présentation
+ui_present_start_hint#:#La première question s’affiche au démarrage. Les participants rejoignent avec le code QR ou le code, même plus tard.
+ui_present_no_questions#:#Cette présentation n’a pas encore de questions.
+ui_present_to_editor#:#Ajouter des questions
+ui_present_join_at#:#Participez sur %s
+ui_present_qr_big#:#Afficher le code QR en grand
+ui_present_participants#:#Participants présents
+ui_present_position#:#Question %s sur %s
+ui_present_voting_closed#:#Vote clos
+ui_present_results_hidden#:#Les résultats sont masqués.
+ui_present_n_answered_one#:#%s personne a répondu
+ui_present_n_answered_other#:#%s personnes ont répondu
+ui_answers_word_one#:#réponse
+ui_answers_word_other#:#réponses
+ui_present_prev#:#Précédente
+ui_present_next#:#Suivante
+ui_present_close_voting#:#Clore le vote
+ui_present_open_voting#:#Ouvrir le vote
+ui_present_show_results#:#Afficher les résultats
+ui_present_hide_results#:#Masquer les résultats
+ui_present_reset#:#Réinitialiser les réponses
+ui_present_reset_title#:#Réinitialiser les réponses ?
+ui_present_reset_text#:#Toutes les réponses à la question actuelle dans cette session sont supprimées et le vote recommence.
+ui_present_fullscreen#:#Plein écran
+ui_present_exit_fullscreen#:#Quitter le plein écran
+ui_present_end#:#Terminer
+ui_present_end_title#:#Terminer la présentation ?
+ui_present_end_text#:#Les participants ne pourront plus répondre. Vous trouverez les résultats dans l’onglet « Résultats ».
+
+# --- Interface : résultats ---
+ui_results_intro#:#Chaque session de la présentation est listée ici.
+ui_results_retention_one#:#Les résultats des sessions terminées sont supprimés après %s jour.
+ui_results_retention_other#:#Les résultats des sessions terminées sont supprimés après %s jours.
+ui_results_none#:#Aucune session pour l’instant. Démarrez la présentation dans l’onglet « Présenter ».
+ui_results_running#:#en cours
+ui_results_n_participants_one#:#%s participant
+ui_results_n_participants_other#:#%s participants
+ui_results_n_answers_one#:#%s réponse
+ui_results_n_answers_other#:#%s réponses
+ui_results_show#:#Afficher
+ui_results_hide#:#Masquer
+ui_results_csv#:#Télécharger le CSV
+ui_results_delete#:#Supprimer
+ui_results_delete_title#:#Supprimer les résultats ?
+ui_results_delete_text#:#Toutes les réponses de la session du %s seront définitivement supprimées.
+ui_results_avg_place#:#place moy. %s
+ui_results_no_words#:#Pas encore de mots.
+ui_leaderboard#:#Classement des points
+ui_leaderboard_empty#:#Personne n’a encore de points.
+ui_quiz_correct_answer#:#Bonne réponse
+
+# --- Interface : participer ---
+ui_joininfo_text#:#Ouvrez la page de participation sur votre smartphone (code QR) ou ici dans le navigateur. Les questions s’affichent dès que la présentation est en cours.
+ui_joininfo_open#:#Participer maintenant
+ui_join_page_title#:#Udon ARS – participer
+ui_noscript#:#Veuillez activer JavaScript pour participer.
+ui_join_enter_code#:#Saisir le code
+ui_join_go#:#Participer
+ui_join_code_invalid#:#Le code comporte six chiffres.
+ui_join_unknown_code#:#Ce code n’existe pas. Veuillez le vérifier.
+ui_join_loading#:#Chargement…
+ui_join_login_title#:#Connexion requise
+ui_join_login_text#:#Veuillez d’abord vous connecter pour participer.
+ui_join_login#:#Se connecter
+ui_join_denied_title#:#Pas d’accès
+ui_join_denied_text#:#Vous n’êtes pas autorisé·e à participer.
+ui_join_waiting_title#:#Ça commence bientôt
+ui_join_waiting_text#:#La présentation n’a pas encore commencé. Cette page s’actualise d’elle-même.
+ui_join_name_title#:#Votre nom pour le classement
+ui_join_name_text#:#Cette présentation contient un quiz. Avec un nom, vous apparaissez dans le classement. C’est facultatif.
+ui_join_name_label#:#Nom ou pseudonyme
+ui_join_name_skip#:#Sans nom
+ui_join_name_save#:#Continuer
+ui_join_choose_one#:#Choisissez une réponse.
+ui_join_choose_many#:#Vous pouvez choisir plusieurs réponses.
+ui_join_words_help_one#:#Saisissez un mot.
+ui_join_words_help_other#:#Saisissez jusqu’à %s mots.
+ui_join_word_n#:#Mot %s
+ui_join_send#:#Envoyer
+ui_join_saved#:#Votre réponse est enregistrée.
+ui_join_quiz_sent#:#Réponse envoyée. La solution suit.
+ui_join_change#:#Modifier la réponse
+ui_join_closed#:#Le vote sur cette question est clos.
+ui_join_quiz_right#:#Correct !
+ui_join_quiz_wrong#:#Malheureusement faux.
+ui_join_quiz_none#:#Aucune réponse donnée.
+ui_join_quiz_total#:#Vos points : %s
+ui_join_quiz_rank#:#Place %s sur %s
+ui_join_results#:#Résultats
+ui_join_other_code#:#Autre code
+ui_rank_help#:#Faites glisser les éléments dans votre ordre ou utilisez les flèches. En haut = 1re place.
+ui_rank_up#:#Monter %s
+ui_rank_down#:#Descendre %s
+ui_rank_moved#:#%s est maintenant à la place %s.

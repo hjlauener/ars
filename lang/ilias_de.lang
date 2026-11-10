@@ -1,5 +1,6 @@
 # Udon ARS – Sprachdatei Deutsch (Schweizer Schreibweise mit ss).
 # Zeilen mit # am Anfang sind Kommentare. Schlüssel und Reihenfolge wie in ilias_en.lang.
+# Schlüssel mit ui_ gehen an die Oberfläche (TypeScript), dort ohne ui_. Platzhalter: %s. Mehrzahl: _one / _other.
 
 # --- Objekt und Rechte ---
 obj_xuda#:#Udon ARS
@@ -14,15 +15,247 @@ grp_create_xuda#:#Udon ARS in der Gruppe anlegen
 cat_create_xuda#:#Udon ARS in der Kategorie anlegen
 fold_create_xuda#:#Udon ARS im Ordner anlegen
 xuda_visible#:#Udon ARS ist sichtbar
-xuda_read#:#Udon ARS öffnen
-xuda_write#:#Einstellungen bearbeiten
+xuda_read#:#Udon ARS öffnen und teilnehmen
+xuda_write#:#Fragen bearbeiten, präsentieren, Ergebnisse und Einstellungen
 xuda_delete#:#Udon ARS löschen oder verschieben
 xuda_edit_permission#:#Rechteeinstellungen ändern
 
 # --- Reiter und allgemeine Texte ---
-content#:#Inhalt
+tab_questions#:#Fragen
+tab_present#:#Präsentieren
+tab_results#:#Ergebnisse
+tab_join#:#Teilnehmen
 properties#:#Einstellungen
 edit#:#Bearbeiten
 
-# --- Inhalt ---
-content_empty#:#Udon ARS ist noch leer. Der Inhalt folgt.
+# --- Info ---
+info_participation#:#Teilnahme
+info_code#:#Teilnahme-Code
+info_address#:#Adresse für die Teilnahme
+
+# --- Einstellungen des Objekts ---
+prop_palette#:#Farbpalette
+prop_result_mode#:#Ergebnisse anzeigen
+prop_result_auto#:#Sofort
+prop_result_auto_info#:#Die Ergebnisse erscheinen live, sobald eine Frage gezeigt wird. Beim Quiz erst nach Ablauf der Zeit.
+prop_result_release#:#Nach Freigabe
+prop_result_release_info#:#Die Ergebnisse bleiben verborgen, bis Sie beim Präsentieren auf «Ergebnisse zeigen» klicken.
+prop_code_info#:#Mit diesem Code und dem QR-Code nehmen die Teilnehmenden teil. Er bleibt gleich, Sie können ihn also ausdrucken.
+prop_renew_code#:#Neuen Code erzeugen
+prop_renew_code_info#:#Der bisherige Code und QR-Code gelten danach nicht mehr.
+
+# --- Farbpaletten ---
+palette_natural#:#Ruhig & Natürlich
+palette_natural_info#:#Sanftes Grün: beruhigend, harmonisch, vertrauenswürdig.
+palette_clear#:#Modern & Klar
+palette_clear_info#:#Klare Blautöne: professionell, übersichtlich, sachlich.
+palette_warm#:#Warm & Freundlich
+palette_warm_info#:#Pfirsich- und Orangetöne: einladend, motivierend, zugänglich.
+palette_fresh#:#Spielerisch & Frisch
+palette_fresh_info#:#Violetttöne: kreativ, lebendig, aber zurückhaltend eingesetzt.
+
+# --- Plugin-Konfiguration ---
+config_title#:#Udon ARS – Einstellungen
+config_anonymous#:#Teilnahme ohne Anmeldung erlauben
+config_anonymous_info#:#Teilnehmende brauchen nur den Code oder den QR-Code. Ausgeschaltet: Nur angemeldete Personen mit Leserecht auf das Objekt können teilnehmen.
+config_types#:#Verfügbare Fragetypen
+config_types_info#:#Ausgeschaltete Typen lassen sich nicht mehr hinzufügen. Bestehende Fragen bleiben erhalten und funktionieren weiter.
+config_palette#:#Standard-Farbpalette
+config_palette_info#:#Für neue Udon ARS. In den Einstellungen jedes Objekts lässt sich eine andere Palette wählen.
+config_retention#:#Ergebnisse automatisch löschen nach
+config_retention_info#:#Gilt nur für beendete Durchführungen. 0 = nie automatisch löschen.
+config_days#:#Tagen
+config_short_url#:#Kurze Adresse für die Teilnahme (freiwillig)
+config_short_url_info#:#Wird beim Präsentieren statt der langen Adresse angezeigt, z.B. https://ilias.example.org/ars. Die Weiterleitung auf join.php im Plugin-Ordner richtet die Betreuung des Webservers ein; der Code wird als Parameter c angehängt.
+config_short_url_invalid#:#Bitte eine Adresse mit http:// oder https:// eingeben.
+config_saved#:#Einstellungen gespeichert.
+
+# --- Export (CSV) ---
+csv_question_nr#:#Frage Nr.
+csv_type#:#Fragetyp
+csv_question#:#Frage
+csv_participant#:#Teilnehmende Person
+csv_name#:#Name (Quiz)
+csv_answer#:#Antwort
+csv_points#:#Punkte
+csv_seconds#:#Sekunden bis zur Antwort
+csv_time#:#Zeitpunkt
+
+# --- Oberfläche: Fragetypen ---
+ui_type_choice#:#Auswahlfrage
+ui_type_choice_desc#:#Teilnehmende wählen aus vorgegebenen Antworten. Für schnelle Stimmungsbilder, Verständnis- und Meinungsfragen.
+ui_tags_choice#:#schnell|in Echtzeit|einfach auszuwerten
+ui_type_cloud#:#Wortwolke
+ui_type_cloud_desc#:#Teilnehmende geben freie Begriffe oder kurze Aussagen ein. Häufig genannte Wörter erscheinen grösser.
+ui_tags_cloud#:#offene Antworten|qualitativ|Begriffe sammeln
+ui_type_rank#:#Rangfolge
+ui_type_rank_desc#:#Teilnehmende bringen Einträge in eine Reihenfolge. Für Prioritäten, Vorlieben und Entscheidungen.
+ui_tags_rank#:#Ziehen und Ablegen|Prioritäten|vergleichend
+ui_type_quiz#:#Quiz
+ui_type_quiz_desc#:#Wissensfragen mit einer richtigen Antwort, Zeitlimit und Punkten.
+ui_tags_quiz#:#Punkte|Zeitlimit|aktivierend
+ui_preview_words#:#Neugier|Team|Austausch|Ruhe|Ideen|Fokus
+ui_picker_title#:#Fragetyp wählen
+ui_picker_subtitle#:#Wählen Sie die passende Form der Beteiligung für Ihre Präsentation.
+ui_picker_use#:#Fragetyp verwenden
+ui_picker_none#:#Alle Fragetypen sind in der Plugin-Konfiguration ausgeschaltet.
+
+# --- Oberfläche: allgemein ---
+ui_cancel#:#Abbrechen
+ui_close#:#Schliessen
+ui_code#:#Code
+ui_qr_label#:#QR-Code für die Teilnahme
+ui_move_up#:#Nach oben
+ui_move_down#:#Nach unten
+ui_err_connection#:#Keine Verbindung zum Server. Es wird weiter versucht …
+ui_err_type_disabled#:#Dieser Fragetyp ist ausgeschaltet.
+ui_err_no_questions#:#Fügen Sie zuerst mindestens eine Frage hinzu.
+ui_err_no_session#:#Die Präsentation läuft gerade nicht.
+ui_err_voting_closed#:#Die Abstimmung zu dieser Frage ist geschlossen.
+ui_err_already_answered#:#Sie haben diese Quizfrage schon beantwortet.
+ui_err_invalid_answer#:#Diese Antwort konnte nicht gespeichert werden.
+ui_seconds_one#:#%s Sekunde
+ui_seconds_other#:#%s Sekunden
+ui_minutes_one#:#%s Minute
+ui_minutes_other#:#%s Minuten
+ui_points_n#:#%s Punkte
+ui_anonymous#:#Ohne Namen
+ui_you#:#Sie
+
+# --- Oberfläche: Fragen bearbeiten ---
+ui_editor_n_questions_one#:#%s Frage
+ui_editor_n_questions_other#:#%s Fragen
+ui_editor_add_question#:#Frage hinzufügen
+ui_editor_go_present#:#Präsentieren
+ui_editor_list_label#:#Fragen der Präsentation
+ui_editor_drag#:#Ziehen, um die Reihenfolge zu ändern
+ui_editor_untitled#:#Ohne Titel
+ui_editor_question_nr#:#Frage %s
+ui_editor_duplicate#:#Duplizieren
+ui_editor_delete#:#Löschen
+ui_editor_delete_title#:#Frage löschen?
+ui_editor_delete_text#:#«%s» wird gelöscht. Antworten aus früheren Durchführungen zu dieser Frage erscheinen danach nicht mehr in den Ergebnissen.
+ui_editor_question#:#Frage
+ui_editor_question_placeholder#:#Ihre Frage …
+ui_editor_answers#:#Antworten
+ui_editor_items#:#Einträge
+ui_editor_help_choice#:#Leere Antworten werden beim Präsentieren weggelassen. Mit der Eingabetaste fügen Sie eine weitere Antwort hinzu.
+ui_editor_help_cloud#:#Teilnehmende schreiben eigene Begriffe.
+ui_editor_help_rank#:#Die Teilnehmenden sehen die Einträge in dieser Reihenfolge und ordnen sie neu.
+ui_editor_help_quiz#:#Markieren Sie genau eine richtige Antwort.
+ui_editor_answer_n#:#Antwort %s
+ui_editor_answer_placeholder#:#Antwort %s
+ui_editor_correct#:#richtig
+ui_editor_mark_correct#:#Als richtige Antwort markieren
+ui_editor_remove_answer#:#Antwort entfernen
+ui_editor_add_answer#:#Antwort hinzufügen
+ui_editor_add_item#:#Eintrag hinzufügen
+ui_editor_settings#:#Optionen
+ui_editor_multiple#:#Mehrere Antworten erlauben
+ui_editor_max_words#:#Begriffe pro Person
+ui_editor_time_limit#:#Zeitlimit
+ui_editor_no_limit#:#Ohne Zeitlimit
+ui_editor_quiz_points#:#Richtige Antwort: 100 Punkte, mit Zeitlimit bis zu 100 Punkte mehr für schnelle Antworten.
+ui_editor_rank_info#:#Die Teilnehmenden ordnen alle Einträge. Ausgewertet wird der durchschnittliche Platz.
+ui_editor_warn_title#:#Die Frage hat noch keinen Text.
+ui_editor_warn_answers#:#Füllen Sie mindestens zwei Antworten aus.
+ui_editor_warn_correct#:#Markieren Sie die richtige Antwort.
+ui_editor_saving#:#Wird gespeichert …
+ui_editor_saved#:#Gespeichert
+ui_editor_save_error#:#Nicht gespeichert
+
+# --- Oberfläche: Präsentieren ---
+ui_present_start#:#Präsentation starten
+ui_present_start_hint#:#Beim Start erscheint die erste Frage. Die Teilnehmenden kommen über den QR-Code oder den Code dazu, auch später noch.
+ui_present_no_questions#:#Diese Präsentation hat noch keine Fragen.
+ui_present_to_editor#:#Fragen hinzufügen
+ui_present_join_at#:#Teilnehmen auf %s
+ui_present_qr_big#:#QR-Code gross anzeigen
+ui_present_participants#:#Teilnehmende jetzt dabei
+ui_present_position#:#Frage %s von %s
+ui_present_voting_closed#:#Abstimmung geschlossen
+ui_present_results_hidden#:#Die Ergebnisse sind verborgen.
+ui_present_n_answered_one#:#%s Person hat geantwortet
+ui_present_n_answered_other#:#%s Personen haben geantwortet
+ui_answers_word_one#:#Antwort
+ui_answers_word_other#:#Antworten
+ui_present_prev#:#Zurück
+ui_present_next#:#Weiter
+ui_present_close_voting#:#Abstimmung schliessen
+ui_present_open_voting#:#Abstimmung öffnen
+ui_present_show_results#:#Ergebnisse zeigen
+ui_present_hide_results#:#Ergebnisse verbergen
+ui_present_reset#:#Antworten zurücksetzen
+ui_present_reset_title#:#Antworten zurücksetzen?
+ui_present_reset_text#:#Alle Antworten auf die aktuelle Frage in dieser Durchführung werden gelöscht, und die Abstimmung beginnt neu.
+ui_present_fullscreen#:#Vollbild
+ui_present_exit_fullscreen#:#Vollbild beenden
+ui_present_end#:#Beenden
+ui_present_end_title#:#Präsentation beenden?
+ui_present_end_text#:#Die Teilnehmenden können danach nicht mehr antworten. Die Ergebnisse finden Sie im Reiter «Ergebnisse».
+
+# --- Oberfläche: Ergebnisse ---
+ui_results_intro#:#Jede Durchführung der Präsentation wird hier aufgeführt.
+ui_results_retention_one#:#Ergebnisse beendeter Durchführungen werden nach %s Tag gelöscht.
+ui_results_retention_other#:#Ergebnisse beendeter Durchführungen werden nach %s Tagen gelöscht.
+ui_results_none#:#Noch keine Durchführungen. Starten Sie die Präsentation im Reiter «Präsentieren».
+ui_results_running#:#läuft
+ui_results_n_participants_one#:#%s Person
+ui_results_n_participants_other#:#%s Personen
+ui_results_n_answers_one#:#%s Antwort
+ui_results_n_answers_other#:#%s Antworten
+ui_results_show#:#Anzeigen
+ui_results_hide#:#Ausblenden
+ui_results_csv#:#CSV herunterladen
+ui_results_delete#:#Löschen
+ui_results_delete_title#:#Ergebnisse löschen?
+ui_results_delete_text#:#Alle Antworten der Durchführung vom %s werden endgültig gelöscht.
+ui_results_avg_place#:#Ø Platz %s
+ui_results_no_words#:#Noch keine Begriffe.
+ui_leaderboard#:#Rangliste
+ui_leaderboard_empty#:#Noch niemand hat Punkte.
+ui_quiz_correct_answer#:#Richtige Antwort
+
+# --- Oberfläche: Teilnehmen ---
+ui_joininfo_text#:#Öffnen Sie die Teilnahme-Seite auf Ihrem Smartphone (QR-Code) oder hier im Browser. Fragen erscheinen, sobald die Präsentation läuft.
+ui_joininfo_open#:#Jetzt teilnehmen
+ui_join_page_title#:#Udon ARS – Teilnehmen
+ui_noscript#:#Bitte schalten Sie JavaScript ein, um teilzunehmen.
+ui_join_enter_code#:#Code eingeben
+ui_join_go#:#Teilnehmen
+ui_join_code_invalid#:#Der Code hat sechs Ziffern.
+ui_join_unknown_code#:#Diesen Code gibt es nicht. Bitte prüfen Sie ihn.
+ui_join_loading#:#Wird geladen …
+ui_join_login_title#:#Anmeldung nötig
+ui_join_login_text#:#Für diese Umfrage melden Sie sich zuerst an.
+ui_join_login#:#Anmelden
+ui_join_denied_title#:#Kein Zugang
+ui_join_denied_text#:#Sie haben keine Berechtigung, an dieser Umfrage teilzunehmen.
+ui_join_waiting_title#:#Gleich geht es los
+ui_join_waiting_text#:#Die Präsentation hat noch nicht begonnen. Diese Seite aktualisiert sich von selbst.
+ui_join_name_title#:#Ihr Name für die Rangliste
+ui_join_name_text#:#Diese Präsentation enthält ein Quiz. Mit einem Namen erscheinen Sie in der Rangliste. Das ist freiwillig.
+ui_join_name_label#:#Name oder Spitzname
+ui_join_name_skip#:#Ohne Namen
+ui_join_name_save#:#Weiter
+ui_join_choose_one#:#Wählen Sie eine Antwort.
+ui_join_choose_many#:#Sie können mehrere Antworten wählen.
+ui_join_words_help_one#:#Geben Sie einen Begriff ein.
+ui_join_words_help_other#:#Geben Sie bis zu %s Begriffe ein.
+ui_join_word_n#:#Begriff %s
+ui_join_send#:#Senden
+ui_join_saved#:#Ihre Antwort ist gespeichert.
+ui_join_quiz_sent#:#Antwort gesendet. Die Auflösung folgt.
+ui_join_change#:#Antwort ändern
+ui_join_closed#:#Die Abstimmung zu dieser Frage ist geschlossen.
+ui_join_quiz_right#:#Richtig!
+ui_join_quiz_wrong#:#Leider falsch.
+ui_join_quiz_none#:#Keine Antwort abgegeben.
+ui_join_quiz_total#:#Ihre Punkte: %s
+ui_join_quiz_rank#:#Platz %s von %s
+ui_join_results#:#Ergebnisse
+ui_join_other_code#:#Anderer Code
+ui_rank_help#:#Ziehen Sie die Einträge in Ihre Reihenfolge oder verwenden Sie die Pfeile. Oben = Platz 1.
+ui_rank_up#:#%s nach oben
+ui_rank_down#:#%s nach unten
+ui_rank_moved#:#%s ist jetzt auf Platz %s.

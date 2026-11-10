@@ -1,5 +1,6 @@
 # Udon ARS – English language file (British spelling).
 # Lines starting with # are comments. Keys and order as in ilias_de.lang.
+# Keys starting with ui_ go to the interface (TypeScript), there without ui_. Placeholder: %s. Plural: _one / _other.
 
 # --- Object and permissions ---
 obj_xuda#:#Udon ARS
@@ -14,15 +15,247 @@ grp_create_xuda#:#Create Udon ARS in group
 cat_create_xuda#:#Create Udon ARS in category
 fold_create_xuda#:#Create Udon ARS in folder
 xuda_visible#:#Udon ARS is visible
-xuda_read#:#Open Udon ARS
-xuda_write#:#Edit settings
+xuda_read#:#Open Udon ARS and take part
+xuda_write#:#Edit questions, present, results and settings
 xuda_delete#:#Delete or move Udon ARS
 xuda_edit_permission#:#Change permission settings
 
 # --- Tabs and general texts ---
-content#:#Content
+tab_questions#:#Questions
+tab_present#:#Present
+tab_results#:#Results
+tab_join#:#Take part
 properties#:#Settings
 edit#:#Edit
 
-# --- Content ---
-content_empty#:#Udon ARS is still empty. The content will follow.
+# --- Info ---
+info_participation#:#Participation
+info_code#:#Participation code
+info_address#:#Address for participation
+
+# --- Settings of the object ---
+prop_palette#:#Colour palette
+prop_result_mode#:#Show results
+prop_result_auto#:#Immediately
+prop_result_auto_info#:#Results appear live as soon as a question is shown. For a quiz only when the time is up.
+prop_result_release#:#After release
+prop_result_release_info#:#Results stay hidden until you click “Show results” while presenting.
+prop_code_info#:#Participants join with this code and the QR code. It stays the same, so you can print it.
+prop_renew_code#:#Generate a new code
+prop_renew_code_info#:#The previous code and QR code will no longer work.
+
+# --- Colour palettes ---
+palette_natural#:#Calm & Natural
+palette_natural_info#:#Soft green: calming, harmonious, trustworthy.
+palette_clear#:#Modern & Clear
+palette_clear_info#:#Clear blues: professional, well-ordered, factual.
+palette_warm#:#Warm & Friendly
+palette_warm_info#:#Peach and orange: inviting, motivating, approachable.
+palette_fresh#:#Playful & Fresh
+palette_fresh_info#:#Violets: creative, lively, but used with restraint.
+
+# --- Plugin configuration ---
+config_title#:#Udon ARS – settings
+config_anonymous#:#Allow participation without login
+config_anonymous_info#:#Participants only need the code or the QR code. Switched off: only logged-in people with read permission on the object can take part.
+config_types#:#Available question types
+config_types_info#:#Types switched off can no longer be added. Existing questions are kept and keep working.
+config_palette#:#Standard colour palette
+config_palette_info#:#For new Udon ARS. Another palette can be chosen in the settings of each object.
+config_retention#:#Delete results automatically after
+config_retention_info#:#Applies only to ended sessions. 0 = never delete automatically.
+config_days#:#days
+config_short_url#:#Short address for participation (optional)
+config_short_url_info#:#Shown while presenting instead of the long address, e.g. https://ilias.example.org/ars. The redirect to join.php in the plugin folder is set up on the web server; the code is appended as parameter c.
+config_short_url_invalid#:#Please enter an address starting with http:// or https://.
+config_saved#:#Settings saved.
+
+# --- Export (CSV) ---
+csv_question_nr#:#Question no.
+csv_type#:#Question type
+csv_question#:#Question
+csv_participant#:#Participant
+csv_name#:#Name (quiz)
+csv_answer#:#Answer
+csv_points#:#Points
+csv_seconds#:#Seconds to answer
+csv_time#:#Time
+
+# --- Interface: question types ---
+ui_type_choice#:#Multiple choice
+ui_type_choice_desc#:#Participants choose from given answers. For quick polls, comprehension checks and opinions.
+ui_tags_choice#:#quick|live|easy to evaluate
+ui_type_cloud#:#Word cloud
+ui_type_cloud_desc#:#Participants enter their own words or short statements. Frequent words appear larger.
+ui_tags_cloud#:#open answers|qualitative|collect terms
+ui_type_rank#:#Ranking
+ui_type_rank_desc#:#Participants put items in order. For priorities, preferences and decisions.
+ui_tags_rank#:#drag and drop|priorities|comparative
+ui_type_quiz#:#Quiz
+ui_type_quiz_desc#:#Knowledge questions with one correct answer, a time limit and points.
+ui_tags_quiz#:#points|time limit|engaging
+ui_preview_words#:#Curiosity|Team|Sharing|Calm|Ideas|Focus
+ui_picker_title#:#Choose a question type
+ui_picker_subtitle#:#Choose the form of participation that suits your presentation.
+ui_picker_use#:#Use this type
+ui_picker_none#:#All question types are switched off in the plugin configuration.
+
+# --- Interface: general ---
+ui_cancel#:#Cancel
+ui_close#:#Close
+ui_code#:#Code
+ui_qr_label#:#QR code for participation
+ui_move_up#:#Move up
+ui_move_down#:#Move down
+ui_err_connection#:#No connection to the server. Retrying …
+ui_err_type_disabled#:#This question type is switched off.
+ui_err_no_questions#:#Please add at least one question first.
+ui_err_no_session#:#The presentation is not running.
+ui_err_voting_closed#:#Voting on this question is closed.
+ui_err_already_answered#:#You have already answered this quiz question.
+ui_err_invalid_answer#:#This answer could not be saved.
+ui_seconds_one#:#%s second
+ui_seconds_other#:#%s seconds
+ui_minutes_one#:#%s minute
+ui_minutes_other#:#%s minutes
+ui_points_n#:#%s points
+ui_anonymous#:#Anonymous
+ui_you#:#you
+
+# --- Interface: editing questions ---
+ui_editor_n_questions_one#:#%s question
+ui_editor_n_questions_other#:#%s questions
+ui_editor_add_question#:#Add question
+ui_editor_go_present#:#Present
+ui_editor_list_label#:#Questions of the presentation
+ui_editor_drag#:#Drag to change the order
+ui_editor_untitled#:#Untitled
+ui_editor_question_nr#:#Question %s
+ui_editor_duplicate#:#Duplicate
+ui_editor_delete#:#Delete
+ui_editor_delete_title#:#Delete question?
+ui_editor_delete_text#:#“%s” will be deleted. Answers to this question from earlier sessions will no longer appear in the results.
+ui_editor_question#:#Question
+ui_editor_question_placeholder#:#Your question …
+ui_editor_answers#:#Answers
+ui_editor_items#:#Items
+ui_editor_help_choice#:#Empty answers are left out when presenting. Press Enter to add another answer.
+ui_editor_help_cloud#:#Participants write their own words.
+ui_editor_help_rank#:#Participants see the items in this order and rearrange them.
+ui_editor_help_quiz#:#Mark exactly one correct answer.
+ui_editor_answer_n#:#Answer %s
+ui_editor_answer_placeholder#:#Answer %s
+ui_editor_correct#:#correct
+ui_editor_mark_correct#:#Mark as correct answer
+ui_editor_remove_answer#:#Remove answer
+ui_editor_add_answer#:#Add answer
+ui_editor_add_item#:#Add item
+ui_editor_settings#:#Options
+ui_editor_multiple#:#Allow several answers
+ui_editor_max_words#:#Words per person
+ui_editor_time_limit#:#Time limit
+ui_editor_no_limit#:#No time limit
+ui_editor_quiz_points#:#Correct answer: 100 points; with a time limit up to 100 extra points for fast answers.
+ui_editor_rank_info#:#Participants order all items. The average place is evaluated.
+ui_editor_warn_title#:#The question has no text yet.
+ui_editor_warn_answers#:#Fill in at least two answers.
+ui_editor_warn_correct#:#Mark the correct answer.
+ui_editor_saving#:#Saving …
+ui_editor_saved#:#Saved
+ui_editor_save_error#:#Not saved
+
+# --- Interface: presenting ---
+ui_present_start#:#Start presentation
+ui_present_start_hint#:#The first question appears when you start. Participants join with the QR code or the code, also later on.
+ui_present_no_questions#:#This presentation has no questions yet.
+ui_present_to_editor#:#Add questions
+ui_present_join_at#:#Take part at %s
+ui_present_qr_big#:#Show QR code large
+ui_present_participants#:#Participants present
+ui_present_position#:#Question %s of %s
+ui_present_voting_closed#:#Voting closed
+ui_present_results_hidden#:#The results are hidden.
+ui_present_n_answered_one#:#%s person has answered
+ui_present_n_answered_other#:#%s people have answered
+ui_answers_word_one#:#answer
+ui_answers_word_other#:#answers
+ui_present_prev#:#Back
+ui_present_next#:#Next
+ui_present_close_voting#:#Close voting
+ui_present_open_voting#:#Open voting
+ui_present_show_results#:#Show results
+ui_present_hide_results#:#Hide results
+ui_present_reset#:#Reset answers
+ui_present_reset_title#:#Reset answers?
+ui_present_reset_text#:#All answers to the current question in this session are deleted and voting starts again.
+ui_present_fullscreen#:#Full screen
+ui_present_exit_fullscreen#:#Exit full screen
+ui_present_end#:#End
+ui_present_end_title#:#End presentation?
+ui_present_end_text#:#Participants can no longer answer. You find the results in the tab “Results”.
+
+# --- Interface: results ---
+ui_results_intro#:#Every session of the presentation is listed here.
+ui_results_retention_one#:#Results of ended sessions are deleted after %s day.
+ui_results_retention_other#:#Results of ended sessions are deleted after %s days.
+ui_results_none#:#No sessions yet. Start the presentation in the tab “Present”.
+ui_results_running#:#running
+ui_results_n_participants_one#:#%s participant
+ui_results_n_participants_other#:#%s participants
+ui_results_n_answers_one#:#%s answer
+ui_results_n_answers_other#:#%s answers
+ui_results_show#:#Show
+ui_results_hide#:#Hide
+ui_results_csv#:#Download CSV
+ui_results_delete#:#Delete
+ui_results_delete_title#:#Delete results?
+ui_results_delete_text#:#All answers of the session of %s will be deleted permanently.
+ui_results_avg_place#:#avg. place %s
+ui_results_no_words#:#No words yet.
+ui_leaderboard#:#Leaderboard
+ui_leaderboard_empty#:#Nobody has points yet.
+ui_quiz_correct_answer#:#Correct answer
+
+# --- Interface: taking part ---
+ui_joininfo_text#:#Open the participation page on your smartphone (QR code) or here in the browser. Questions appear as soon as the presentation is running.
+ui_joininfo_open#:#Take part now
+ui_join_page_title#:#Udon ARS – take part
+ui_noscript#:#Please enable JavaScript to take part.
+ui_join_enter_code#:#Enter the code
+ui_join_go#:#Join
+ui_join_code_invalid#:#The code has six digits.
+ui_join_unknown_code#:#This code does not exist. Please check it.
+ui_join_loading#:#Loading …
+ui_join_login_title#:#Login required
+ui_join_login_text#:#Please log in first to take part in this poll.
+ui_join_login#:#Log in
+ui_join_denied_title#:#No access
+ui_join_denied_text#:#You are not allowed to take part in this poll.
+ui_join_waiting_title#:#Starting soon
+ui_join_waiting_text#:#The presentation has not started yet. This page updates by itself.
+ui_join_name_title#:#Your name for the leaderboard
+ui_join_name_text#:#This presentation contains a quiz. With a name you appear on the leaderboard. This is optional.
+ui_join_name_label#:#Name or nickname
+ui_join_name_skip#:#Without name
+ui_join_name_save#:#Continue
+ui_join_choose_one#:#Choose one answer.
+ui_join_choose_many#:#You can choose several answers.
+ui_join_words_help_one#:#Enter one word.
+ui_join_words_help_other#:#Enter up to %s words.
+ui_join_word_n#:#Word %s
+ui_join_send#:#Send
+ui_join_saved#:#Your answer has been saved.
+ui_join_quiz_sent#:#Answer sent. The solution follows.
+ui_join_change#:#Change answer
+ui_join_closed#:#Voting on this question is closed.
+ui_join_quiz_right#:#Correct!
+ui_join_quiz_wrong#:#Sorry, wrong.
+ui_join_quiz_none#:#No answer given.
+ui_join_quiz_total#:#Your points: %s
+ui_join_quiz_rank#:#Place %s of %s
+ui_join_results#:#Results
+ui_join_other_code#:#Other code
+ui_rank_help#:#Drag the items into your order or use the arrows. Top = first place.
+ui_rank_up#:#Move %s up
+ui_rank_down#:#Move %s down
+ui_rank_moved#:#%s is now in place %s.
